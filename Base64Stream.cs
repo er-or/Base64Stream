@@ -1,4 +1,4 @@
-﻿//=============================================================================
+//=============================================================================
 // License:
 // This is free and unencumbered software released into the public domain.
 // Anyone is free to copy, modify, publish, use, compile, sell, or distribute 
@@ -78,7 +78,7 @@ public class Base64Stream : Stream {
     /// <summary>
     /// The inner stream to wrap around
     /// </summary>
-    private Stream wrapped;
+    private Stream wrapped = null;
 
     /// <summary>
     /// Whether to leave the underlying stream open or not after disposal.
@@ -193,10 +193,12 @@ public class Base64Stream : Stream {
     /// <summary>
     /// We need to flush the bit output here, but the stream cleanup is
     /// done in Dispose().
-    /// The .NET docs say:
-    /// Do not override the Close() method, instead, 
-    /// put all the Stream cleanup logic in the Dispose(Boolean) method. 
     /// </summary>
+    /// <remarks>
+    /// Strem base.Close() calls Dispose(), which creates an infinite loop.
+    /// So we must not call base.Close() here.
+    /// https://github.com/microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs
+    /// </remarks>
     public override void Close() {
         try {
             endOutput();
@@ -769,7 +771,7 @@ public class Base64Stream : Stream {
     /// in the underlying stream.
     /// </summary>
     /// <returns>The next decoded byte from the Base64Stream, or -1 if the end of the stream has been reached.</returns>
-    public int ReadByte() {
+    public override int ReadByte() {
         if (inputBitStep < inputBitSize) {
             if (inputBitStep == 1) {
                 // Return the second byte from the bit-buffer
