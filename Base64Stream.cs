@@ -195,7 +195,7 @@ public class Base64Stream : Stream {
     /// done in Dispose().
     /// </summary>
     /// <remarks>
-    /// Strem base.Close() calls Dispose(), which creates an infinite loop.
+    /// The Stream base.Close() calls Dispose(), which creates an infinite loop.
     /// So we must not call base.Close() here.
     /// https://github.com/microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs
     /// </remarks>
@@ -208,9 +208,9 @@ public class Base64Stream : Stream {
 
 
     /// <summary>
-    /// Disposes of this stream. 
-    /// Close() should be called to send remaining bits of base64 conversion to
-    /// the underlying stream, though Close() will not close the underlying stream.
+    /// Disposes of this Stream. 
+    /// Close() is be called to send remaining bits of base64 conversion to
+    /// the underlying stream.
     /// </summary>
     /// <remarks>
     /// Closes this stream and the underlying stream if <c>leaveOpen</c> was false in constructor.
@@ -685,7 +685,7 @@ public class Base64Stream : Stream {
     /// <param name="copyToBuffer">The byte[] array to copy the decoded data to.</param>
     /// <param name="copyFromOffset">The offset to start copying decoded data to.</param>
     /// <param name="copyLength">The maximum number of decoded bytes to copy in this call.</param>
-    /// <returns>The next decoded data byte from the underlying stream.</returns>
+    /// <returns>The number of bytes copied from the underlying stream.</returns>
     public override int Read(byte[] copyToBuffer, int copyFromOffset, int copyLength) {
 
         // Save original offset
